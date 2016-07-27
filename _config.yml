@@ -1,0 +1,17 @@
+# Document:
+# http://simiki.org/docs/configuration.html
+
+url: https://fangmenghao.github.io/
+title: Fang's Wiki
+keywords: Linux, Java, Shell
+description: Personal Wiki
+author: Fang
+
+root: /wiki
+theme: yasimple_x2
+
+deploy:
+  - type: git
+    remote: origin
+    branch: gh-pages
+

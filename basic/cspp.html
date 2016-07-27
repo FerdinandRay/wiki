@@ -1,0 +1,515 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/colorful.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="Atom feed">
+    <title>深入理解计算机系统 - Fang's Wiki</title>
+    <meta name="keywords" content="Linux, Java, Shell"/>
+    <meta name="description" content="Personal Wiki"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+  </head>
+
+  <body>
+    <div id="container" class="typo">
+      
+<div id="header">
+  <div id="post-nav">
+    <a href="/wiki/">Fang's Wiki</a>
+    &nbsp;&#187;&nbsp;
+    <a href="/wiki/#basic">basic</a>
+    &nbsp;&#187;&nbsp;深入理解计算机系统
+    <span class="updated">Updated&nbsp;
+    2016-7-26 13:29
+    </span>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">第一章</a></li>
+<li><a href="#_2">第二章</a></li>
+<li><a href="#_3">第三章 程序的机器级表示</a><ul>
+<li><a href="#32">3.2 程序编码</a><ul>
+<li><a href="#321">3.2.1 机器级代码</a></li>
+<li><a href="#322">3.2.2 代码示例</a></li>
+<li><a href="#323">3.2.3 关于格式的注解</a></li>
+</ul>
+</li>
+<li><a href="#33">3.3 数据格式</a></li>
+<li><a href="#34">3.4 访问信息</a><ul>
+<li><a href="#341">3.4.1 操作数指示符</a></li>
+<li><a href="#342">3.4.2 数据传送指令</a></li>
+<li><a href="#343">3.4.3 数据传送示例</a></li>
+</ul>
+</li>
+<li><a href="#35">3.5 算术和逻辑操作</a><ul>
+<li><a href="#351">3.5.1 加载有效地址</a></li>
+<li><a href="#352">3.5.2 一元操作和二元操作</a></li>
+<li><a href="#353">3.5.3 移位操作</a></li>
+<li><a href="#355">3.5.5 特殊的算术操作</a></li>
+</ul>
+</li>
+<li><a href="#36">3.6 控制</a><ul>
+<li><a href="#361">3.6.1 条件码</a></li>
+<li><a href="#362">3.6.2 访问条件码</a></li>
+<li><a href="#363">3.6.3 跳转指令及其编码</a></li>
+<li><a href="#364">3.6.4 翻译条件分支</a></li>
+</ul>
+</li>
+<li><a href="#37">3.7 过程</a></li>
+<li><a href="#38">3.8 数组分配和访问</a></li>
+<li><a href="#39">3.9 异质的数据结构</a></li>
+<li><a href="#310">3.10 综合：理解指针</a></li>
+<li><a href="#311-gdb">3.11 应用：使用GDB调试器</a></li>
+<li><a href="#312">3.12 存储器的越界引用和缓冲区溢出</a></li>
+<li><a href="#313-x86-64ia3264">3.13 x86-64：将IA32扩展到64位</a></li>
+<li><a href="#314">3.14 浮点程序的机器级表示</a></li>
+<li><a href="#315">3.15 小结</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="_1">第一章</h1>
+<h1 id="_2">第二章</h1>
+<h1 id="_3">第三章 程序的机器级表示</h1>
+<h2 id="32">3.2 程序编码</h2>
+<h3 id="321">3.2.1 机器级代码</h3>
+<blockquote>
+<p>概念</p>
+</blockquote>
+<ul>
+<li>程序计数器：指示将要执行的下一条指令在存储器的地址<ul>
+<li>IA32中，通常称为<code>PC</code>，用<code>%eip</code>表示</li>
+</ul>
+</li>
+<li>整数寄存器<code>3.4 访问信息更具体</code><ul>
+<li>数量：8个</li>
+<li>大小：32位</li>
+<li>作用：<ol>
+<li>存储地址（对应C语言指针）</li>
+<li>整数数据</li>
+<li>有的用于存储某些重要的程序状态，其他的临时存储数据</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>条件码寄存器<ul>
+<li>作用：存储最近执行的算术或逻辑指令的状态信息，用于实现控制或条件变化</li>
+</ul>
+</li>
+<li>浮点寄存器<ul>
+<li>作用：存放浮点数据</li>
+</ul>
+</li>
+<li>程序存储器<code>program memory</code></li>
+</ul>
+<blockquote>
+<p>抽象</p>
+</blockquote>
+<ol>
+<li>
+<p>机器级程序的格式和行为，定义为指令集体系结构（Instruction set architecture, ISA）</p>
+<ul>
+<li>定义了处理器状态</li>
+<li>定义了指令的格式</li>
+<li>定义了每条指令对状态的影响</li>
+</ul>
+</li>
+<li>
+<p>机器级程序使用的存储器地址是虚拟地址</p>
+</li>
+</ol>
+<h3 id="322">3.2.2 代码示例</h3>
+<blockquote>
+<p>gcc</p>
+</blockquote>
+<ul>
+<li>得到目标文件<code>gcc -O1 -c hello.c --&gt; heelo.s</code></li>
+<li>得到汇编文件<code>gcc -O1 -S hello.c --&gt; hello.o</code></li>
+<li>反汇编<ol>
+<li>目标文件<code>objdump -d hello.o</code></li>
+<li>可执行程序<code>objdump -d hello.out</code></li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>汇编代码语法</p>
+</blockquote>
+<ul>
+<li>IA32指令长度在1-15个字节，不常用的指令字节数会更多</li>
+<li>下一条指令的地址是上一条指令地址+上一条指令的字节数</li>
+<li>反汇编器基于机器代码文件中的字节序列来确定汇编代码</li>
+<li>反汇编<code>.o文件</code>和<code>.s文件的代码</code>有区别<ol>
+<li>反汇编器的指令名字后面没有<code>l</code>，这个后缀是大小指示器</li>
+</ol>
+</li>
+<li>反汇编<code>.o文件</code>和<code>可执行程序</code>区别<ol>
+<li><code>可执行程序</code>经过了链接，所以左边的地址是具体的。</li>
+<li>全局变量的地址</li>
+</ol>
+</li>
+<li>汇编代码中<code>.</code>开头的行都是指导汇编器和链接器的命令</li>
+<li>汇编代码不区分有符号或无符号整数、各种类型的指针、指针和整数</li>
+</ul>
+<h3 id="323">3.2.3 关于格式的注解</h3>
+<h2 id="33">3.3 数据格式</h2>
+<blockquote>
+<p>概念</p>
+</blockquote>
+<ul>
+<li>字节：<code>8位</code></li>
+<li>字：<code>word 16位</code></li>
+<li>双字：<code>double words 32位</code></li>
+<li>四字：<code>quad words 64位</code></li>
+</ul>
+<blockquote>
+<p>数据类型表</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left">C声明</th>
+<th align="center">Intel数据类型</th>
+<th align="center">汇编代码后缀</th>
+<th align="right">大小（字节）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">char</td>
+<td align="center">字节</td>
+<td align="center">b</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">short</td>
+<td align="center">字</td>
+<td align="center">w</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td align="left">int</td>
+<td align="center">双字</td>
+<td align="center">l</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">long int</td>
+<td align="center">双字</td>
+<td align="center">l</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">long long int</td>
+<td align="center">---</td>
+<td align="center">---</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">char *</td>
+<td align="center">双字</td>
+<td align="center">l</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">float</td>
+<td align="center">单精度</td>
+<td align="center">s</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">double</td>
+<td align="center">双精度</td>
+<td align="center">l</td>
+<td align="right">8</td>
+</tr>
+<tr>
+<td align="left">long double</td>
+<td align="center">扩展精度</td>
+<td align="center">t</td>
+<td align="right">10/12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="34">3.4 访问信息</h2>
+<blockquote>
+<p>概念</p>
+</blockquote>
+<ul>
+<li>寄存器<ul>
+<li>前6个可以看成通用寄存器，因为有些指令以固定的寄存器作为源寄存器或目的寄存器</li>
+<li>前3个寄存器和中间3个寄存器的保存恢复惯例不同，最后2个寄存器根据栈惯例的标准惯例才能修改</li>
+<li>字节操作指令可以读写低8位的寄存器<code>%al, %ah...</code></li>
+<li>字操作指令可以读写低16位的寄存器<code>%ax, %cx...</code></li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">32</th>
+<th align="right">16</th>
+<th align="center">8</th>
+<th align="center">0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">%eax</td>
+<td align="right">%ax</td>
+<td align="center">%ah</td>
+<td align="center">%al</td>
+</tr>
+<tr>
+<td align="left">%ecx</td>
+<td align="right">%cx</td>
+<td align="center">%ch</td>
+<td align="center">%cl</td>
+</tr>
+<tr>
+<td align="left">%edx</td>
+<td align="right">%dx</td>
+<td align="center">%dh</td>
+<td align="center">%dl</td>
+</tr>
+<tr>
+<td align="left">%ebx</td>
+<td align="right">%bx</td>
+<td align="center">%bh</td>
+<td align="center">%bl</td>
+</tr>
+<tr>
+<td align="left">%esi</td>
+<td align="right">%si</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="left">%edi</td>
+<td align="right">%di</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="left">%esp</td>
+<td align="right">%sp</td>
+<td align="center"></td>
+<td align="center">栈指针</td>
+</tr>
+<tr>
+<td align="left">%ebp</td>
+<td align="right">%bp</td>
+<td align="center"></td>
+<td align="center">帧指针</td>
+</tr>
+</tbody>
+</table>
+<h3 id="341">3.4.1 操作数指示符</h3>
+<blockquote>
+<p>操作数类型，这里还有一个操作数格式的表</p>
+</blockquote>
+<ul>
+<li>
+<p>立即数(immediate)</p>
+<ul>
+<li>语法：<code>$整数</code></li>
+<li>例子：<code>$23 | $-23 | $0xFF</code></li>
+</ul>
+</li>
+<li>
+<p>寄存器(register)</p>
+<ul>
+<li>语法：<code>Ea表示任意寄存器a &amp; R[Ea]表示该寄存器内的值</code></li>
+<li>例子1：<code>%eax --&gt; 得到%eax寄存器内的值</code></li>
+</ul>
+</li>
+<li>
+<p>存储器(memory)</p>
+<ul>
+<li>语法：<code>Mb[Addr]</code></li>
+<li>例子：<code>(%eax) --&gt; 得到%eax寄存器内的值，这个值应该是个地址，然后根据这个地址找到该地址的值</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="342">3.4.2 数据传送指令</h3>
+<blockquote>
+<p>概念</p>
+</blockquote>
+<p>mov指令在汇编语言中，有2个分类优先级。</p>
+<p>我们先根据是做符号扩展还是零扩展或者没有扩展来选择mov指令，然后根据寄存器的位数来选择mov指令的后缀<code>b:8位 | w:16位 | l:32位</code></p>
+<h3 id="343">3.4.3 数据传送示例</h3>
+<h2 id="35">3.5 算术和逻辑操作</h2>
+<h3 id="351">3.5.1 加载有效地址</h3>
+<blockquote>
+<p>leal指令</p>
+</blockquote>
+<p>这个指令没有变种，就是不需要根据操作数的大小来添加后缀<code>b | w | l</code></p>
+<p>格式是：<code>leal S,D</code> --&gt; <code>D &lt;-- &amp;S</code></p>
+<p>就是把S的地址保存在D中，D必须是一个32位的寄存器才对。</p>
+<h3 id="352">3.5.2 一元操作和二元操作</h3>
+<blockquote>
+<p>一元操作：INC DEC NEG NOT</p>
+<p>格式：INC D，因为只有一个操作数，所以叫一元</p>
+</blockquote>
+<ul>
+<li><code>INC</code>：自加1</li>
+<li><code>DEC</code>：自减1</li>
+<li><code>NEG</code>：取负</li>
+<li><code>NOT</code>：取补</li>
+</ul>
+<blockquote>
+<p>二元操作：ADD SUB IMUL XOR OR AND</p>
+<p>格式：ADD S,D 得到 D &lt;-- D+S</p>
+<p>规则约束</p>
+</blockquote>
+<ul>
+<li>第一个操作数可以是：<code>立即数</code>、<code>寄存器</code>、<code>存储器地址</code></li>
+<li>第二个操作数可以是：<code>寄存器</code>、<code>存储器地址</code></li>
+</ul>
+<h3 id="353">3.5.3 移位操作</h3>
+<blockquote>
+<p>指令：SAL SHL SAR SHR</p>
+<p>格式：SAL k,D 得到 D &lt;-- D&lt;&lt;k</p>
+</blockquote>
+<ul>
+<li><code>SAL</code>：左移</li>
+<li><code>SHL</code>：左移</li>
+<li><code>SAR</code>：算术右移</li>
+<li><code>SHR</code>：逻辑右移</li>
+</ul>
+<blockquote>
+<p>规则约束</p>
+</blockquote>
+<ul>
+<li>
+<p>参数<code>k</code></p>
+<ol>
+<li>单个字节编码</li>
+<li>因为IA32，所以只能移位0-31位。</li>
+<li>可以是<code>立即数</code>、<code>单字节寄存器中的值%cl</code>，这个指令很特殊，只允许使用<code>%cl</code>这个寄存器作操作数</li>
+</ol>
+</li>
+<li>
+<p>左移适用于有/无符号数</p>
+</li>
+<li>
+<p>右移对有/无符号数做不同的操作</p>
+</li>
+</ul>
+<h3 id="355">3.5.5 特殊的算术操作</h3>
+<blockquote>
+<p>这节针对的是64位的有/无符号乘法，除法指令。转为四字指令</p>
+<p>两个32位数的乘法，有/无符号的要求如下</p>
+</blockquote>
+<ul>
+<li>要求一个参数必须放在寄存器<code>%eax</code>，另一个作为指令的源操作数给出</li>
+<li>乘积的存放：高32位存放在<code>%edx</code>，低32位存放在<code>%eax</code></li>
+</ul>
+<blockquote>
+<p>例子：如果计算 x * y，假设都是32位的数，x存放在<code>%ebp+8</code>，y在<code>%ebp+12</code></p>
+</blockquote>
+<ol>
+<li>movl 12(%ebp), %eax</li>
+<li>imull 8(%ebp) --&gt; 这个指令会把这个操作数乘%eax的值</li>
+<li>movl %eax, (%esp) --&gt; 指针指向低32位</li>
+<li>movl %edx, 4(%esp) --&gt; 指针+4指向高32位</li>
+</ol>
+<p>因此，低位的在栈顶，+4找到高32位</p>
+<blockquote>
+<p>除法，则<code>%eax</code> --&gt; 存放商 <code>%edx</code> --&gt; 存放余数</p>
+</blockquote>
+<ul>
+<li>无符号除法使用<code>divl</code>指令，事先将<code>%edx</code>设置为0</li>
+<li>有符号除法使用<code>idivl</code>指令，根据数的符号选择移位操作，将<code>%edx</code>置1或置0</li>
+</ul>
+<h2 id="36">3.6 控制</h2>
+<h3 id="361">3.6.1 条件码</h3>
+<blockquote>
+<p>条件码：描述最近的算术或逻辑操作的属性，可以检查这些条件码寄存器来执行条件分支指令</p>
+<p>常用条件码</p>
+</blockquote>
+<ul>
+<li><code>CF</code>：进位标志，最近的操作使最高位产生了进位，<code>用来检查无符号操作数的溢出</code></li>
+<li><code>ZF</code>：零标志，最近的操作得出的结果为0</li>
+<li><code>SF</code>：符号标志，最近的操作得到的结果为负数</li>
+<li><code>OF</code>：溢出标志，最近的操作导致一个补码溢出，正溢出或负溢出</li>
+</ul>
+<blockquote>
+<p>导致条件码改变的指令：INC DEC NEG NOT | ADD SUB IMUL XOR OR AND | SAL SHL SAR SHR</p>
+<p>有两个指令只改变条件码不改变其他寄存器：CMP TEST</p>
+</blockquote>
+<ul>
+<li><code>CMP S2, S1</code>：比较，操作<code>S1-S2</code>，如果两个数相等，则零标志<code>ZF=1</code></li>
+<li><code>TEST S2, S1</code>：测试，操作<code>S1 &amp; S2</code>，有一个数是掩码，用来指示哪些位应该被测试</li>
+</ul>
+<h3 id="362">3.6.2 访问条件码</h3>
+<blockquote>
+<p>条件码不会直接读取，常用的读取方法有三种</p>
+</blockquote>
+<ol>
+<li>可以根据条件码的组合，将一个字节设置为0或1，这里使用<code>SET</code>系列指令<ul>
+<li>有符号比较基于<code>SF^OF和ZF的组合</code></li>
+<li>无符号比较基于<code>CF和ZF的组合</code></li>
+</ul>
+</li>
+<li>可以条件跳转到程序的某个其他的组合</li>
+<li>可以有条件地传送数据</li>
+</ol>
+<h3 id="363">3.6.3 跳转指令及其编码</h3>
+<blockquote>
+<p>跳转指令分为：有条件跳转和无条件跳转</p>
+</blockquote>
+<ul>
+<li>
+<p>有条件跳转：根据条件码寄存器跳转，对应于C语言的if(test-statement)</p>
+</li>
+<li>
+<p>无条件跳转：<code>根据标号跳转</code>和<code>根据地址跳转</code></p>
+<ul>
+<li>根据标号跳转：<code>jmp LABEL_NAME</code> 比如 <code>jmp L1</code></li>
+<li>根据地址跳转：<code>jmp *%eax</code> 或者 <code>jmp *(%eax)</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>jmp 地址的计算</p>
+</blockquote>
+<ol>
+<li>获得跳转指令的指令编码的最后一个字节</li>
+<li>获得跳转指令下一条指令的地址</li>
+<li>将1和2获得的数值相加，则是具体的跳转地址</li>
+</ol>
+<p><strong>注意点</strong>
+    1. 1获得指令编码的时候注意该字节的符号
+    2. 程序计数器，即PC存储的值是3获得的值，而不是jmp指令的地址</p>
+<h3 id="364">3.6.4 翻译条件分支</h3>
+<h2 id="37">3.7 过程</h2>
+<h2 id="38">3.8 数组分配和访问</h2>
+<h2 id="39">3.9 异质的数据结构</h2>
+<h2 id="310">3.10 综合：理解指针</h2>
+<h2 id="311-gdb">3.11 应用：使用GDB调试器</h2>
+<h2 id="312">3.12 存储器的越界引用和缓冲区溢出</h2>
+<h2 id="313-x86-64ia3264">3.13 x86-64：将IA32扩展到64位</h2>
+<h2 id="314">3.14 浮点程序的机器级表示</h2>
+<h2 id="315">3.15 小结</h2>
+  
+</div>
+    </div>
+    <div id="footer">
+      <div class="footer-left">
+        <p>
+        Copyright © 2016 Fang.
+        Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+        Theme by <a href="https://git.coding.net/tankywoo/yasimple_x2.git" target="_blank">YASimple_X2</a>.
+        </p>
+      </div> <!-- end footer-left -->
+      <div class="footer-right">
+        <p>Site Generated 2016-07-27 09:31:31</p>
+      </div> <!-- end footer-right -->
+    </div>
+  </body>
+</html>

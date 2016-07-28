@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/colorful.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="Atom feed">
+    <title>Oh My Zsh - Fang's Wiki</title>
+    <meta name="keywords" content="Linux, Java, Shell"/>
+    <meta name="description" content="Personal Wiki"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+  </head>
+
+  <body>
+    <div id="container" class="typo">
+      
+<div id="header">
+  <div id="post-nav">
+    <a href="/wiki/">Fang's Wiki</a>
+    &nbsp;&#187;&nbsp;
+    <a href="/wiki/#tool">tool</a>
+    &nbsp;&#187;&nbsp;Oh My Zsh
+    <span class="updated">Updated&nbsp;
+    2016-07-26 16:54
+    </span>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#0x00">0x00 安装</a></li>
+<li><a href="#0x01">0x01 配置</a></li>
+<li><a href="#0x02">0x02 乱码问题</a></li>
+</ul>
+</div>
+<h1 id="0x00">0x00 安装</h1>
+<blockquote>
+<p>环境：ubuntu 14.04 x86-64</p>
+</blockquote>
+<div class="hlcode"><pre><span class="c1">// 1. 安装Zsh</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">zsh</span>
+<span class="c1">// 2. 安装oh-my-zsh，权限问题，请加sudo在最前面</span>
+<span class="n">sh</span> <span class="o">-</span><span class="n">c</span> <span class="s">&quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;</span>
+<span class="c1">// 3. 改变默认shell</span>
+<span class="n">sudo</span> <span class="n">chsh</span> <span class="o">-</span><span class="n">s</span> <span class="err">$</span><span class="p">(</span><span class="n">which</span> <span class="n">zsh</span><span class="p">)</span>
+<span class="c1">// 4. 不知道什么原因，我无法通过这个命令更改shell，所以去直接修改/etc/passwd</span>
+<span class="c1">// 5. 注销再登陆</span>
+</pre></div>
+
+
+<h1 id="0x01">0x01 配置</h1>
+<blockquote>
+<p>主要是换个主题，花哨一点的。</p>
+</blockquote>
+<div class="hlcode"><pre><span class="c1">// 1. 更改主题</span>
+<span class="n">vim</span> <span class="o">~/</span><span class="p">.</span><span class="n">zshrc</span>
+<span class="c1">// 2. 找到ZSH_THEME，我将它修改为agnoster，因为字体问题有乱码，其实就是无法正常显示一些字符</span>
+</pre></div>
+
+
+<h1 id="0x02">0x02 乱码问题</h1>
+<div class="hlcode"><pre><span class="c1">// 1. 下载字体</span>
+<span class="c1">// 地址：https://github.com/powerline/fonts</span>
+<span class="c1">// 2. 解压并运行</span>
+<span class="p">.</span><span class="o">/</span><span class="n">install</span><span class="p">.</span><span class="n">sh</span>
+<span class="c1">// 3. 修改ubuntu的terminal默认配置，选择字体中带有&quot;derivative Powerline&quot;的就可以了</span>
+</pre></div>
+  
+</div>
+    </div>
+    <div id="footer">
+      <div class="footer-left">
+        <p>
+        Copyright © 2016 Fang.
+        Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+        Theme by <a href="https://git.coding.net/tankywoo/yasimple_x2.git" target="_blank">YASimple_X2</a>.
+        </p>
+      </div> <!-- end footer-left -->
+      <div class="footer-right">
+        <p>Site Generated 2016-07-28 12:24:41</p>
+      </div> <!-- end footer-right -->
+    </div>
+  </body>
+</html>

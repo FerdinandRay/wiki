@@ -33,13 +33,20 @@
 <li><a href="#0x00">0x00 类</a></li>
 <li><a href="#0x01">0x01 接口</a></li>
 <li><a href="#0x02">0x02 关系线</a><ul>
-<li><a href="#_1">继承：空心三角形 + 实线</a></li>
-<li><a href="#_2">实现接口：空心三角形 + 虚线</a></li>
+<li><a href="#generalization">继承(Generalization)：空心三角形 + 实线</a></li>
+<li><a href="#realization">实现接口(Realization)：空心三角形 + 虚线</a></li>
 <li><a href="#association">关联(association)：普通箭头 + 实线</a></li>
 <li><a href="#aggregation">聚合(aggregation)：空心菱形 + 实线 + 普通箭头</a></li>
 <li><a href="#composition">合成(Composition，组合)：实心菱形 + 实线 + 普通箭头</a></li>
 <li><a href="#dependency">依赖(Dependency)：虚线 + 普通箭头</a></li>
-<li><a href="#_3">其他</a></li>
+<li><a href="#_1">其他</a></li>
+</ul>
+</li>
+<li><a href="#0x03">0x03 图</a><ul>
+<li><a href="#_2">序列图</a></li>
+<li><a href="#_3">状态图</a></li>
+<li><a href="#use-case">用例图(Use Case)</a></li>
+<li><a href="#_4">活动图</a></li>
 </ul>
 </li>
 </ul>
@@ -47,28 +54,30 @@
 <h1 id="0x00">0x00 类</h1>
 <blockquote>
 <p><strong><em>类分三层</em></strong></p>
+</blockquote>
 <ul>
 <li>第一层：类名，若类名是斜体--&gt;说明该类是抽象类</li>
 <li>第二层：类的特性，通常是字段和属性</li>
 <li>第三层：类的操作，通常是方法或行为，+代表public | -代表private | #代表protected</li>
 </ul>
-</blockquote>
-<hr />
 <blockquote>
-<p><strong><em>其他规则</em></strong>
-- 若一个类实现了一个接口，则该类上会有一个类似棒棒糖的图案</p>
+<p><strong><em>其他规则</em></strong></p>
 </blockquote>
+<ul>
+<li>若一个类实现了一个接口，则该类上会有一个类似棒棒糖的图案</li>
+</ul>
 <h1 id="0x01">0x01 接口</h1>
 <h1 id="0x02">0x02 关系线</h1>
 <blockquote>
 <p>类A：指向类B</p>
 <p>类B：被箭头指着的类</p>
 </blockquote>
-<h4 id="_1">继承：空心三角形 + 实线</h4>
-<h4 id="_2">实现接口：空心三角形 + 虚线</h4>
+<h4 id="generalization">继承(Generalization)：空心三角形 + 实线</h4>
+<h4 id="realization">实现接口(Realization)：空心三角形 + 虚线</h4>
 <h4 id="association">关联(association)：普通箭头 + 实线</h4>
 <blockquote>
 <p>在类A中引用类B，就是在类A中实例化了类B</p>
+<p>在java中体现为类A有一个类B的成员属性 --&gt; 大话设计模式p14</p>
 </blockquote>
 <h4 id="aggregation">聚合(aggregation)：空心菱形 + 实线 + 普通箭头</h4>
 <blockquote>
@@ -85,13 +94,20 @@
 <h4 id="dependency">依赖(Dependency)：虚线 + 普通箭头</h4>
 <blockquote>
 <p>类A需要类B，依赖类B</p>
+<p>通常类B表现为作为参数传入到类A的方法中</p>
 </blockquote>
-<h4 id="_3">其他</h4>
+<h4 id="_1">其他</h4>
 <blockquote>
 <ul>
 <li>基数：就是在连接类之间有数字进行标识，主类引用了几个其他类，体现在：<code>关联</code>、<code>聚合</code>、<code>合成</code></li>
+<li>开闭原则是目标，里氏代换原则是基础，依赖倒转原则是手段</li>
 </ul>
 </blockquote>
+<h1 id="0x03">0x03 图</h1>
+<h4 id="_2">序列图</h4>
+<h4 id="_3">状态图</h4>
+<h4 id="use-case">用例图(Use Case)</h4>
+<h4 id="_4">活动图</h4>
   
 </div>
     </div>
@@ -104,7 +120,7 @@
         </p>
       </div> <!-- end footer-left -->
       <div class="footer-right">
-        <p>Site Generated 2016-07-28 12:24:41</p>
+        <p>Site Generated 2016-08-05 07:33:49</p>
       </div> <!-- end footer-right -->
     </div>
   </body>

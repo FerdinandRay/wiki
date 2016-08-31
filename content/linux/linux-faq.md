@@ -23,13 +23,18 @@ sudo udisks --detach /dev/sdb
 
 ***3. Android-Studio tool.jar seems not什么***
 
-环境：ubuntu 14.04 amd64
-原因：安装了OpenJdk，通过java -version和javac -version如果版本不同，且前者出现了OpenJdk字样。
-方法：命令行删除暂时不会，老说找不到，正则了也不行，所以图形界面直接找到删除了就行
-后续：还可能会有一个错误，看下面。
+	环境：ubuntu 14.04 amd64
+
+	原因：安装了OpenJdk，通过java -version和javac -version如果版本不同，且前者出现了OpenJdk字样。
+
+	方法：命令行删除暂时不会，老说找不到，正则了也不行，所以图形界面直接找到删除了就行
+
+	后续：还可能会有一个错误，看下面。
 
 ***4. Android-Studio No JDK Found***
 
-原因：因为之前删除了OpenJdk，虽然你的环境变量中有了jdk的配置，但还是不能打开Android-Studio
-方法：执行该命令`sudo update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 100`
-后续：不知道为什么，单纯网上找的答案。
+	原因：因为之前删除了OpenJdk，虽然你的环境变量中有了jdk的配置，但还是不能打开Android-Studio
+
+	方法：执行该命令`sudo update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 100`
+
+	后续：不知道为什么，单纯网上找的答案。

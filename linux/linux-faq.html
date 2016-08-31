@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/colorful.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="Atom feed">
+    <title>Linux FAQ - Fang's Wiki</title>
+    <meta name="keywords" content="Linux, Java, Shell"/>
+    <meta name="description" content="Personal Wiki"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+  </head>
+
+  <body>
+    <div id="container" class="typo">
+      
+<div id="header">
+  <div id="post-nav">
+    <a href="/wiki/">Fang's Wiki</a>
+    &nbsp;&#187;&nbsp;
+    <a href="/wiki/#linux">linux</a>
+    &nbsp;&#187;&nbsp;Linux FAQ
+    <span class="updated">Updated&nbsp;
+    2016-07-29 18:07
+    </span>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div id="content">
+  <p><strong><em>1. GPG签名验证失败：由于没有公钥，下列签名无法进行验证</em></strong></p>
+<div class="hlcode"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">key</span> <span class="n">adv</span> <span class="o">--</span><span class="n">recv</span><span class="o">-</span><span class="n">keys</span> <span class="o">--</span><span class="n">keyserver</span> <span class="n">keyserver</span><span class="p">.</span><span class="n">Ubuntu</span><span class="p">.</span><span class="n">com</span> <span class="n">DDA4DB69</span>  
+</pre></div>
+
+
+<p><strong><em>2. 移动硬盘无法安全移除，ubuntu下安全卸载后又自动挂载</em></strong></p>
+<div class="hlcode"><pre><span class="c1">// 1. 需要安装udisks命令</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">udisks</span>
+<span class="c1">// 2. 卸载硬盘</span>
+<span class="n">sudo</span> <span class="n">umount</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb1</span><span class="p">(</span><span class="err">这里填自己的移动硬盘</span><span class="p">)</span>
+<span class="c1">// 3. 关闭电源</span>
+<span class="n">sudo</span> <span class="n">udisks</span> <span class="o">--</span><span class="n">detach</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb</span>
+</pre></div>
+
+
+<p><strong><em>3. Android-Studio tool.jar seems not什么</em></strong></p>
+<p>环境：ubuntu 14.04 amd64
+原因：安装了OpenJdk，通过java -version和javac -version如果版本不同，且前者出现了OpenJdk字样。
+方法：命令行删除暂时不会，老说找不到，正则了也不行，所以图形界面直接找到删除了就行
+后续：还可能会有一个错误，看下面。</p>
+<p><strong><em>4. Android-Studio No JDK Found</em></strong></p>
+<p>原因：因为之前删除了OpenJdk，虽然你的环境变量中有了jdk的配置，但还是不能打开Android-Studio
+方法：执行该命令<code>sudo update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 100</code>
+后续：不知道为什么，单纯网上找的答案。</p>
+  
+</div>
+    </div>
+    <div id="footer">
+      <div class="footer-left">
+        <p>
+        Copyright © 2016 Fang.
+        Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+        Theme by <a href="https://git.coding.net/tankywoo/yasimple_x2.git" target="_blank">YASimple_X2</a>.
+        </p>
+      </div> <!-- end footer-left -->
+      <div class="footer-right">
+        <p>Site Generated 2016-08-31 13:10:01</p>
+      </div> <!-- end footer-right -->
+    </div>
+  </body>
+</html>

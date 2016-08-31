@@ -45,14 +45,23 @@
 
 
 <p><strong><em>3. Android-Studio tool.jar seems not什么</em></strong></p>
-<p>环境：ubuntu 14.04 amd64
-原因：安装了OpenJdk，通过java -version和javac -version如果版本不同，且前者出现了OpenJdk字样。
-方法：命令行删除暂时不会，老说找不到，正则了也不行，所以图形界面直接找到删除了就行
-后续：还可能会有一个错误，看下面。</p>
+<div class="hlcode"><pre><span class="err">环境：</span><span class="n">ubuntu</span> <span class="mf">14.04</span> <span class="n">amd64</span>
+
+<span class="err">原因：安装了</span><span class="n">OpenJdk</span><span class="err">，通过</span><span class="n">java</span> <span class="o">-</span><span class="n">version</span><span class="err">和</span><span class="n">javac</span> <span class="o">-</span><span class="n">version</span><span class="err">如果版本不同，且前者出现了</span><span class="n">OpenJdk</span><span class="err">字样。</span>
+
+<span class="err">方法：命令行删除暂时不会，老说找不到，正则了也不行，所以图形界面直接找到删除了就行</span>
+
+<span class="err">后续：还可能会有一个错误，看下面。</span>
+</pre></div>
+
+
 <p><strong><em>4. Android-Studio No JDK Found</em></strong></p>
-<p>原因：因为之前删除了OpenJdk，虽然你的环境变量中有了jdk的配置，但还是不能打开Android-Studio
-方法：执行该命令<code>sudo update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 100</code>
-后续：不知道为什么，单纯网上找的答案。</p>
+<div class="hlcode"><pre><span class="err">原因：因为之前删除了</span><span class="n">OpenJdk</span><span class="err">，虽然你的环境变量中有了</span><span class="n">jdk</span><span class="err">的配置，但还是不能打开</span><span class="n">Android</span><span class="o">-</span><span class="n">Studio</span>
+
+<span class="err">方法：执行该命令`</span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">java</span> <span class="n">java</span> <span class="err">$</span><span class="n">JAVA_HOME</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">java</span> <span class="mi">100</span><span class="err">`</span>
+
+<span class="err">后续：不知道为什么，单纯网上找的答案。</span>
+</pre></div>
   
 </div>
     </div>
@@ -65,7 +74,7 @@
         </p>
       </div> <!-- end footer-left -->
       <div class="footer-right">
-        <p>Site Generated 2016-08-31 13:10:01</p>
+        <p>Site Generated 2016-08-31 13:16:21</p>
       </div> <!-- end footer-right -->
     </div>
   </body>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/colorful.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="Atom feed">
+    <title>Centos 6.6 mini amd64 VirtualBox5.0.8 - Fang's Wiki</title>
+    <meta name="keywords" content="Linux, Java, Shell"/>
+    <meta name="description" content="Personal Wiki"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+  </head>
+
+  <body>
+    <div id="container" class="typo">
+      
+<div id="header">
+  <div id="post-nav">
+    <a href="/wiki/">Fang's Wiki</a>
+    &nbsp;&#187;&nbsp;
+    <a href="/wiki/#linux">linux</a>
+    &nbsp;&#187;&nbsp;Centos 6.6 mini amd64 VirtualBox5.0.8
+    <span class="updated">Updated&nbsp;
+    2016-09-09 18:00
+    </span>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div id="content">
+  <h3 id="0x01">0x01 网络配置</h3>
+<div class="hlcode"><pre><span class="err">虚拟机：桥接网络</span>
+
+<span class="mf">1.</span> <span class="err">配置</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">network</span><span class="o">-</span><span class="n">script</span><span class="o">/</span><span class="n">ifcfg</span><span class="o">-</span><span class="n">eth0</span>
+    <span class="n">ONBOOT</span><span class="o">=</span><span class="n">yes</span>
+    <span class="n">BOOTPROTO</span><span class="o">=</span><span class="k">static</span>
+    <span class="n">IPADDR</span><span class="o">=</span><span class="mf">192.168.1.111</span><span class="p">(</span><span class="err">因为通过无线路由器连接的</span><span class="p">)</span>
+    <span class="n">NETMASK</span><span class="o">=</span><span class="mf">255.255.255.0</span>
+    <span class="n">GATEWAY</span><span class="o">=</span><span class="mf">192.168.1.1</span>
+
+<span class="mf">2.</span> <span class="err">配置</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">resolv</span><span class="p">.</span><span class="n">conf</span>
+    <span class="n">nameserver</span> <span class="mf">8.8.8.8</span>
+
+<span class="mf">3.</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">network</span> <span class="n">restart</span>
+</pre></div>
+
+
+<h3 id="0x02-apache">0x02 安装Apache</h3>
+<div class="hlcode"><pre><span class="mf">1.</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">httpd</span>
+<span class="mf">2.</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">httpd</span> <span class="n">restart</span>
+    <span class="err">错误：</span><span class="n">Starting</span> <span class="n">httpd</span><span class="o">:</span> <span class="n">httpd</span><span class="o">:</span> <span class="n">Could</span> <span class="n">not</span> <span class="n">reliably</span> <span class="n">determine</span> <span class="n">the</span> <span class="n">server</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">fully</span> <span class="n">qualified</span> <span class="n">domain</span> <span class="n">name</span><span class="p">,</span> <span class="n">using</span> <span class="n">localhost</span><span class="p">.</span><span class="n">localdomain</span> <span class="k">for</span> <span class="n">ServerName</span>
+    <span class="err">解决方法：</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">).</span> <span class="n">vi</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">httpd</span><span class="p">.</span><span class="n">conf</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">).</span> <span class="err">找到#</span><span class="n">ServerName</span> <span class="n">www</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">com</span><span class="o">:</span><span class="mi">80</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">).</span> <span class="err">修改为</span><span class="n">ServerName</span> <span class="n">localhost</span><span class="o">:</span><span class="mi">80</span>
+<span class="mf">3.</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">httpd</span> <span class="n">restart</span>
+<span class="mf">4.</span> <span class="n">chkconfig</span> <span class="n">httpd</span> <span class="n">on</span> <span class="o">--</span> <span class="err">开机启动</span><span class="n">httpd</span><span class="err">服务</span>
+</pre></div>
+
+
+<h3 id="0x03-tomcat">0x03 安装Tomcat</h3>
+<div class="hlcode"><pre><span class="mf">1.</span> <span class="err">安装</span><span class="n">java</span>
+    <span class="n">a</span><span class="p">.</span> <span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">jdk</span><span class="o">-</span><span class="mf">1.7.0</span><span class="n">_80</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span>
+    <span class="n">b</span><span class="p">.</span> <span class="n">mv</span> <span class="n">jdk1</span><span class="mf">.7.0</span><span class="n">_80</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span>
+    <span class="n">c</span><span class="p">.</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">profile</span>
+        <span class="err">#</span> <span class="err">放在文件末尾</span>
+        <span class="n">PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">jdk1</span><span class="mf">.7.0</span><span class="n">_80</span><span class="o">/</span><span class="n">bin</span><span class="o">:</span><span class="err">$</span><span class="n">PATH</span>
+        <span class="n">export</span> <span class="n">PATH</span>
+    <span class="n">d</span><span class="p">.</span> <span class="n">source</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">profile</span>
+    <span class="n">e</span><span class="p">.</span> <span class="n">java</span> <span class="o">-</span><span class="n">version</span>
+
+<span class="mf">2.</span> <span class="err">安装</span><span class="n">tomcat</span>
+    <span class="n">a</span><span class="p">.</span> <span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">apache</span><span class="o">-</span><span class="n">tomcat</span><span class="o">-</span><span class="n">x</span><span class="p">.</span><span class="n">x</span><span class="p">.</span><span class="n">x</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span>
+    <span class="n">b</span><span class="p">.</span> <span class="n">mv</span> <span class="n">apache</span><span class="o">-</span><span class="n">tomcat</span><span class="o">-</span><span class="n">x</span> <span class="n">tomcat</span>
+    <span class="n">c</span><span class="p">.</span> <span class="n">mv</span> <span class="n">tomcat</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span>
+    <span class="n">d</span><span class="p">.</span> <span class="n">vim</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tomcat</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">catalina</span><span class="p">.</span><span class="n">sh</span>
+        <span class="err">#</span> <span class="err">这些配置信息要放在文件开头第二行开始</span>
+        <span class="err">#</span> <span class="n">chkconfig</span><span class="o">:</span> <span class="mi">35</span> <span class="mi">85</span> <span class="mi">15</span> <span class="o">--</span> <span class="err">这一行应该是开机启动服务</span>
+        <span class="err">#</span> <span class="err">寻找</span><span class="n">CLASSPATH</span><span class="o">=</span><span class="err">行</span>
+        <span class="n">CLASSPATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">jdk1</span><span class="mf">.7.0</span><span class="n">_71</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">tools</span><span class="p">.</span><span class="n">jar</span><span class="o">:/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">jdk1</span><span class="mf">.7.0</span><span class="n">_71</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dt</span><span class="p">.</span><span class="n">jar</span>
+        <span class="err">#</span> <span class="err">寻找</span><span class="n">CATALINE_HOME</span>
+        <span class="n">CATALINA_HOME</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tomcat</span>
+        <span class="err">#</span> <span class="err">寻找</span><span class="n">JAVA_HOME</span>
+        <span class="n">JAVA_HOME</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">jdk1</span><span class="mf">.7.0</span><span class="n">_71</span>
+        <span class="err">#</span> <span class="err">寻找</span><span class="n">JRE_HOME</span>
+        <span class="n">JRE_HOME</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">jdk1</span><span class="mf">.7.0</span><span class="n">_71</span>
+    <span class="n">e</span><span class="p">.</span> <span class="n">cp</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tomcat</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">catalina</span><span class="p">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">tomcat</span>
+    <span class="n">f</span><span class="p">.</span> <span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">tomcat</span>
+</pre></div>
+
+
+<h3 id="0x04-mysql">0x04 安装MySQL</h3>
+<div class="hlcode"><pre><span class="mf">1.</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">mysql</span> <span class="n">mysql</span><span class="o">-</span><span class="n">server</span>
+
+<span class="mf">2.</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">mysqld</span> <span class="n">start</span>
+
+<span class="mf">3.</span> <span class="n">chkconfig</span> <span class="n">mysqld</span> <span class="n">on</span> <span class="o">--</span> <span class="err">开机启动</span><span class="n">mysqld</span><span class="err">服务</span>
+
+<span class="mf">4.</span> <span class="n">cp</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">my</span><span class="o">-</span><span class="n">medium</span><span class="p">.</span><span class="n">cnf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">my</span><span class="p">.</span><span class="n">cnf</span> <span class="o">--</span> <span class="err">若</span><span class="n">etc</span><span class="err">下存在，则覆盖</span>
+
+<span class="mf">5.</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">mysqladmin</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="n">password</span> <span class="err">&#39;</span><span class="n">YourPassWord</span><span class="err">&#39;</span>
+
+<span class="mf">6.</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">mysqld</span> <span class="n">restart</span>
+</pre></div>
+
+
+<h3 id="0x05-php">0x05 安装PHP</h3>
+<div class="hlcode"><pre><span class="mf">1.</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">php</span>
+
+<span class="mf">2.</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">php</span><span class="o">-</span><span class="n">mysql</span> <span class="n">php</span><span class="o">-</span><span class="n">gd</span> <span class="n">libjpeg</span><span class="o">*</span> <span class="n">php</span><span class="o">-</span><span class="n">imap</span> <span class="n">php</span><span class="o">-</span><span class="n">ldap</span> <span class="n">php</span><span class="o">-</span><span class="n">odbc</span> <span class="n">php</span><span class="o">-</span><span class="n">pear</span> <span class="n">php</span><span class="o">-</span><span class="n">xml</span> <span class="n">php</span><span class="o">-</span><span class="n">xmlrpc</span> <span class="n">php</span><span class="o">-</span><span class="n">mbstring</span> <span class="n">php</span><span class="o">-</span><span class="n">mcrypt</span> <span class="n">php</span><span class="o">-</span><span class="n">bcmath</span> <span class="n">php</span><span class="o">-</span><span class="n">mhash</span> <span class="n">libmcrypt</span>
+
+<span class="mf">3.</span> <span class="n">Centos6</span><span class="mf">.6</span> <span class="err">版本，反正我安装的时候</span><span class="n">yum</span><span class="err">里面是找不到</span><span class="n">libmcrypt</span><span class="err">这个包，不要着急，等下会解决</span>
+</pre></div>
+
+
+<h3 id="0x06-phpmyadmin401011">0x06 配置phpMyAdmin(4.0.10.11)</h3>
+<blockquote>
+<p>错误：You don't have permission to access /phpMyAdmin on this server.</p>
+</blockquote>
+<div class="hlcode"><pre><span class="err">解决方案：</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">).</span> <span class="n">vi</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">selinux</span><span class="o">/</span><span class="n">config</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">).</span> 
+        <span class="n">SELINUX</span><span class="o">=</span><span class="n">enforcing</span> <span class="err">加#注释</span>
+        <span class="n">SELINUXTYPE</span><span class="o">=</span><span class="n">targeted</span> <span class="err">加#注释</span>
+        <span class="n">SELINUX</span><span class="o">=</span><span class="n">disabled</span> <span class="err">增加这行</span>
+</pre></div>
+
+
+<blockquote>
+<p>错误：缺少mcrypt扩展，请检查PHP配置</p>
+</blockquote>
+<div class="hlcode"><pre><span class="err">解决方案：</span>
+    <span class="err">准备工作：</span>
+        <span class="n">a</span><span class="p">.</span> <span class="err">确定</span><span class="n">phpize</span><span class="err">和</span><span class="n">php</span><span class="o">-</span><span class="n">config</span>
+            <span class="n">whereis</span> <span class="n">phpize</span> <span class="err">和</span> <span class="n">whereis</span> <span class="n">php</span><span class="o">-</span><span class="n">config</span> <span class="err">可确定这</span><span class="mi">2</span><span class="err">个包是否安装</span>
+        <span class="n">b</span><span class="p">.</span> <span class="err">若没有</span><span class="n">phpize</span><span class="err">，则</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">php</span><span class="o">-</span><span class="n">devel</span>
+        <span class="n">c</span><span class="p">.</span> <span class="err">事先安装</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">gcc</span><span class="err">，因为编译需要</span><span class="n">c</span><span class="err">编译器</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">).</span> <span class="n">http</span><span class="o">:</span><span class="c1">//cn.php.net/releases/ 网页下找到自己服务器的php版本，下载后tar解压（本人的是php5.3.3）</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">).</span> <span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">php</span><span class="o">-</span><span class="mf">5.3.3</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">).</span> <span class="n">cd</span> <span class="n">php</span><span class="o">-</span><span class="mf">5.3.3</span><span class="o">/</span><span class="n">ext</span><span class="o">/</span><span class="n">mcrypt</span><span class="o">/</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">).</span> <span class="n">phpize</span> <span class="o">--&gt;</span> <span class="err">#运行这一条生成</span><span class="n">configure</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">).</span> <span class="p">.</span><span class="o">/</span><span class="n">configure</span> <span class="o">--</span><span class="n">with</span><span class="o">-</span><span class="n">php</span><span class="o">-</span><span class="n">config</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">php</span><span class="o">-</span><span class="n">config</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">).</span> <span class="n">make</span> <span class="o">&amp;&amp;</span> <span class="n">make</span> <span class="n">install</span>
+        <span class="err">若输出：</span><span class="n">Installing</span> <span class="n">shared</span> <span class="n">extensions</span><span class="o">:</span>     <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span>  <span class="o">---</span> <span class="err">哒哒哒</span><span class="o">~</span><span class="err">安装成功</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">).</span> <span class="n">cd</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">php</span><span class="p">.</span><span class="n">d</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">).</span> <span class="n">echo</span> <span class="err">&#39;</span><span class="n">extension</span><span class="o">=</span><span class="n">mcrypt</span><span class="p">.</span><span class="n">so</span><span class="err">&#39;</span> <span class="o">&gt;</span> <span class="n">mcrypt</span><span class="p">.</span><span class="n">ini</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">).</span> <span class="err">重启</span><span class="n">apache</span>
+</pre></div>
+
+
+<blockquote>
+<p>错误：缺少短语密码，高级功能未开启</p>
+</blockquote>
+<div class="hlcode"><pre><span class="err">解决方案：</span>
+    <span class="mf">1.</span> <span class="n">cd</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">phpMyAdmin</span><span class="o">/</span><span class="n">examples</span>
+    <span class="mf">2.</span> <span class="n">mysql</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span> <span class="n">create_tables</span><span class="p">.</span><span class="n">sql</span>
+    <span class="mf">3.</span> <span class="n">cp</span> <span class="n">config</span><span class="p">.</span><span class="n">sample</span><span class="p">.</span><span class="n">inc</span><span class="p">.</span><span class="n">php</span> <span class="n">config</span><span class="p">.</span><span class="n">inc</span><span class="p">.</span><span class="n">php</span>
+    <span class="mf">4.</span> <span class="n">vim</span> <span class="n">config</span><span class="p">.</span><span class="n">inc</span><span class="p">.</span><span class="n">php</span> <span class="err">删除</span><span class="n">pma</span><span class="err">的注释，前面有</span><span class="mi">3</span><span class="err">行左右可以保留注释</span>
+    <span class="mf">5.</span> <span class="err">注销</span><span class="n">phpMyAdmin</span><span class="err">重新登陆</span>
+</pre></div>
+
+
+<h3 id="0x07">0x07 个人站点</h3>
+<div class="hlcode"><pre><span class="mi">1</span><span class="nx">.</span> <span class="err">文件配置：</span>
+    <span class="mi">1</span><span class="nx">.</span> <span class="nx">vi</span> <span class="p">/</span><span class="nx">etc</span><span class="p">/</span><span class="nx">httpd</span><span class="p">/</span><span class="nx">conf</span><span class="p">/</span><span class="nx">httpd.conf</span>
+    <span class="mi">2</span><span class="nx">.</span> <span class="err">注释</span><span class="nx">UserDir</span> <span class="nx">disable</span>
+    <span class="mi">3</span><span class="nx">.</span> <span class="err">取消注释</span><span class="nx">UserDir</span> <span class="nx">public_html</span>
+    <span class="mi">4</span><span class="nx">.</span> <span class="err">取消注释</span><span class="o">&lt;</span><span class="nx">Directory</span> <span class="p">/</span><span class="nb">home</span><span class="o">/*/</span><span class="nx">public_html</span><span class="o">&gt;</span> <span class="o">-----</span> <span class="o">&lt;/</span><span class="nx">Directory</span><span class="o">&gt;</span><span class="err">之间</span>
+<span class="mi">2</span><span class="nx">.</span> <span class="err">网站搭建：</span>
+    <span class="mi">1</span><span class="nx">.</span> <span class="nx">cd</span> <span class="err">~</span>
+    <span class="mi">2</span><span class="nx">.</span> <span class="nx">mkdir</span> <span class="nx">public_html</span><span class="p">(</span><span class="err">这个是配置文件里表明的网站主目录，没改过，感觉可以改</span><span class="p">)</span> <span class="o">--</span> <span class="p">(</span><span class="err">后来发现可以改</span><span class="p">)</span>
+    <span class="mi">3</span><span class="nx">.</span> <span class="nb">chmod</span> <span class="mi">705</span> <span class="na">-R</span> <span class="p">/</span><span class="nb">home</span><span class="o">/</span><span class="nv">$USERNAME</span>
+</pre></div>
+
+
+<h3 id="0x08">0x08 信息</h3>
+<div class="hlcode"><pre><span class="mf">1.</span> <span class="n">php</span>
+    <span class="n">PHP</span> <span class="mf">5.3.3</span> <span class="p">(</span><span class="n">cli</span><span class="p">)</span> <span class="p">(</span><span class="n">built</span><span class="o">:</span> <span class="n">Jul</span>  <span class="mi">9</span> <span class="mi">2015</span> <span class="mi">17</span><span class="o">:</span><span class="mi">39</span><span class="o">:</span><span class="mo">00</span><span class="p">)</span> 
+    <span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">1997</span><span class="o">-</span><span class="mi">2010</span> <span class="n">The</span> <span class="n">PHP</span> <span class="n">Group</span>
+    <span class="n">Zend</span> <span class="n">Engine</span> <span class="n">v2</span><span class="mf">.3.0</span><span class="p">,</span> <span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">1998</span><span class="o">-</span><span class="mi">2010</span> <span class="n">Zend</span> <span class="n">Technologies</span>
+<span class="mf">2.</span> <span class="n">mysql</span>
+    <span class="n">mysql</span>  <span class="n">Ver</span> <span class="mf">14.14</span> <span class="n">Distrib</span> <span class="mf">5.1.73</span><span class="p">,</span> <span class="k">for</span> <span class="n">redhat</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span> <span class="p">(</span><span class="n">x86_64</span><span class="p">)</span> <span class="n">using</span> <span class="n">readline</span> <span class="mf">5.1</span>
+</pre></div>
+  
+</div>
+    </div>
+    <div id="footer">
+      <div class="footer-left">
+        <p>
+        Copyright © 2016 Fang.
+        Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+        Theme by <a href="https://git.coding.net/tankywoo/yasimple_x2.git" target="_blank">YASimple_X2</a>.
+        </p>
+      </div> <!-- end footer-left -->
+      <div class="footer-right">
+        <p>Site Generated 2016-09-10 22:38:00</p>
+      </div> <!-- end footer-right -->
+    </div>
+  </body>
+</html>
